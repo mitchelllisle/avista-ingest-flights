@@ -17,6 +17,14 @@ type AviationStack struct {
 	PageLimit int
 }
 
+func InitAvista(url, accessToken string, pageLimit int) *AviationStack {
+	return &AviationStack{
+		URL:         url,
+		AccessToken: accessToken,
+		PageLimit:   pageLimit,
+	}
+}
+
 func (a *AviationStack) getPage(offset int, arrivalPortCode string) AviationStackFlightsResponse {
 	url := fmt.Sprintf(
 		"%s/flights?access_key=%s&limit=%d&offset=%d&arr_iata=%s",

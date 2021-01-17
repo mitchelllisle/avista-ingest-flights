@@ -11,6 +11,12 @@ type AviationStackConfig struct {
 
 type AppConfig struct {
 	AvistaConfig *AviationStackConfig
+	GCPConfig *GCPConfig
+}
+
+type GCPConfig struct {
+	Project string
+	StorageBucket string
 }
 
 func NewAppConfig() *AppConfig {
@@ -20,7 +26,13 @@ func NewAppConfig() *AppConfig {
 		ArrivalCode: utils.GetEnvOrString("AVIATION_STACK_ARRIVAL_CODE", "SYD"),
 		PageLimit: utils.GetEnvOrInt("AVIATION_STACK_PAGE_LIMIT", 100),
 	}
+
+	gcp := GCPConfig{
+		Project: utils.GetEnvOrPanic("GOOGLE_PROJECT"),
+		StorageBucket: utils.GetEnvOrPanic("GOOGLE_BUCKET"),
+	}
 	return &AppConfig{
 		AvistaConfig: &avista,
+		GCPConfig: &gcp,
 	}
 }
