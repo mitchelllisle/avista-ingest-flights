@@ -5,9 +5,9 @@ import (
 	"github.com/mitchelllisle/avista-ingest-flights/src/aviationStack"
 	"github.com/mitchelllisle/avista-ingest-flights/src/config"
 	"github.com/mitchelllisle/avista-ingest-flights/src/gcp"
+	"github.com/mitchelllisle/avista-ingest-flights/src/utils"
 	"log"
 	"net/http"
-	"time"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 
 	payload := aviationStack.CollectRecords(flightChannel)
 
-	fileName := fmt.Sprintf("%s.jsonl", time.Now().Format(time.RFC3339))
+	fileName := utils.GenerateFileName(AppConfig.GCPConfig.StorageFolder)
 
 	log.Println(fmt.Sprintf("writing file %s", fileName))
 	storage.UploadFile(payload, fileName, "application/json")
