@@ -10,10 +10,11 @@ import (
 	"time"
 )
 
-func GenerateFileName() string {
+func GenerateFileName(folder string) string {
 	fileTime := time.Now()
 	fileName := fmt.Sprintf(
-		"%d/%d/%d/%s.jsonl",
+		"%s/%d/%d/%d/%s.jsonl",
+		folder,
 		fileTime.Year(),
 		fileTime.Month(),
 		fileTime.Day(),

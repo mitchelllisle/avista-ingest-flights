@@ -25,7 +25,7 @@ func main() {
 
 	payload := aviationStack.CollectRecords(flightChannel)
 
-	fileName := utils.GenerateFileName()
+	fileName := utils.GenerateFileName(AppConfig.GCPConfig.StorageFolder)
 
 	log.Println(fmt.Sprintf("writing file %s", fileName))
 	storage.UploadFile(payload, fileName, "application/json")
