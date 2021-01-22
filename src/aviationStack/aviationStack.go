@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/mitchelllisle/avista-ingest-flights/src/utils"
+	"github.com/wlredeye/jsonlines"
 	"io/ioutil"
 	"log"
 	"math"
@@ -87,11 +88,13 @@ func (a *AviationStack) StreamFlights(channel chan <- Flight, arrivalPortCode st
 
 // Collect all records from channel and convert to []byte which is a json lines file when written
 func CollectRecords(channel chan Flight) []byte {
-	buffer := new(bytes.Buffer)
+	var records []Flight
+	var buffer bytes.Buffer
 
 	for record := range channel {
-		err := json.NewEncoder(buffer).Encode(record)
-		utils.ContinueOnError(err, "Unable to marshal Flights into byte slice. Row will be discarded")
+		records = append(records, record)
 	}
+	err := jsonlines.Encode(&buffer, &records)
+	utils.PanicOnError(err, "unable to parse data into json lines")
 	return buffer.Bytes()
 }
