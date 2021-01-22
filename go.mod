@@ -1,4 +1,4 @@
-module AvistaIngestFlights
+module github.com/mitchelllisle/avista-ingest-flights
 
 go 1.13
 
