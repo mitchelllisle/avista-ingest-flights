@@ -1,10 +1,10 @@
 package aviationStack
 
 import (
-	"avista-ingest-flights/src/utils"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/mitchelllisle/avista-ingest-flights/src/utils"
 	"io/ioutil"
 	"log"
 	"math"

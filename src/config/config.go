@@ -1,6 +1,8 @@
 package config
 
-import "avista-ingest-flights/src/utils"
+import (
+	"github.com/mitchelllisle/avista-ingest-flights/src/utils"
+)
 
 type AviationStackConfig struct {
 	URL string

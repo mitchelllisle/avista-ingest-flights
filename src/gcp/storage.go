@@ -1,10 +1,10 @@
 package gcp
 
 import (
-	"avista-ingest-flights/src/utils"
 	"cloud.google.com/go/storage"
 	"context"
 	"fmt"
+	"github.com/mitchelllisle/avista-ingest-flights/src/utils"
 	"google.golang.org/api/iterator"
 	"io/ioutil"
 	"time"
