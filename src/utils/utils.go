@@ -3,10 +3,26 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"log"
 	"os"
 	"strconv"
+	"time"
 )
+
+func GenerateFileName(folder string) string {
+	fileTime := time.Now()
+	fileName := fmt.Sprintf(
+		"%s/%d/%d/%d/%s.jsonl",
+		folder,
+		fileTime.Year(),
+		fileTime.Month(),
+		fileTime.Day(),
+		uuid.New(),
+	)
+	return fileName
+}
+
 
 func GetEnvOrString(key string, defaultVal string) string {
 	if value, exists := os.LookupEnv(key); exists {
