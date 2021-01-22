@@ -18,5 +18,6 @@ jobs:
           runtime: go113
           credentials: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           timeout: 180
+          region: australia-southeast1
           entry_point: AvistaIngestFlights
           env_vars: GOOGLE_PROJECT=${{ secrets.GOOGLE_PROJECT }},GOOGLE_BUCKET=${{ secrets.GOOGLE_BUCKET }},GOOGLE_FOLDER=${{ secrets.GOOGLE_FOLDER }},AVIATION_STACK_API_KEY=${{ secrets.AVIATION_STACK_API_KEY }}
