@@ -1,10 +1,10 @@
 package Endpoint
 
 import (
-	"avista-ingest-flights/src/aviationStack"
-	"avista-ingest-flights/src/config"
-	"avista-ingest-flights/src/gcp"
 	"fmt"
+	"github.com/mitchelllisle/avista-ingest-flights/src/aviationStack"
+	"github.com/mitchelllisle/avista-ingest-flights/src/config"
+	"github.com/mitchelllisle/avista-ingest-flights/src/gcp"
 	"log"
 	"net/http"
 	"time"
