@@ -1,4 +1,4 @@
-package Endpoint
+package main
 
 import (
 	"fmt"
@@ -10,8 +10,7 @@ import (
 	"time"
 )
 
-
-func AvistaIngestFlights(w http.ResponseWriter, r *http.Request) {
+func main() {
 	AppConfig := config.NewAppConfig()
 
 	avista := aviationStack.InitAvista(
@@ -32,4 +31,9 @@ func AvistaIngestFlights(w http.ResponseWriter, r *http.Request) {
 	storage.UploadFile(payload, fileName, "application/json")
 
 	log.Println("finished")
+}
+
+
+func AvistaIngestFlights(w http.ResponseWriter, r *http.Request) {
+	main()
 }
