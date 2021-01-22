@@ -17,6 +17,7 @@ type AppConfig struct {
 type GCPConfig struct {
 	Project string
 	StorageBucket string
+	StorageFolder string
 }
 
 func NewAppConfig() *AppConfig {
@@ -30,6 +31,7 @@ func NewAppConfig() *AppConfig {
 	gcp := GCPConfig{
 		Project: utils.GetEnvOrPanic("GOOGLE_PROJECT"),
 		StorageBucket: utils.GetEnvOrPanic("GOOGLE_BUCKET"),
+		StorageFolder: utils.GetEnvOrPanic("GOOGLE_FOLDER"),
 	}
 	return &AppConfig{
 		AvistaConfig: &avista,

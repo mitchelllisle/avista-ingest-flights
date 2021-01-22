@@ -2,6 +2,7 @@ package aviationStack
 
 import (
 	"avista-ingest-flights/src/utils"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -82,4 +83,15 @@ func (a *AviationStack) StreamFlights(channel chan <- Flight, arrivalPortCode st
 	}
 
 	wg.Wait()
+}
+
+// Collect all records from channel and convert to []byte which is a json lines file when written
+func CollectRecords(channel chan Flight) []byte {
+	buffer := new(bytes.Buffer)
+
+	for record := range channel {
+		err := json.NewEncoder(buffer).Encode(record)
+		utils.ContinueOnError(err, "Unable to marshal Flights into byte slice. Row will be discarded")
+	}
+	return buffer.Bytes()
 }
