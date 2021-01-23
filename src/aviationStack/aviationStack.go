@@ -10,6 +10,7 @@ import (
 	"log"
 	"math"
 	"net/http"
+	"strconv"
 	"sync"
 )
 
@@ -27,16 +28,19 @@ func InitAvista(url, accessToken string, pageLimit int) *AviationStack {
 	}
 }
 
-func (a *AviationStack) getPage(offset int, arrivalPortCode string) AviationStackFlightsResponse {
-	url := fmt.Sprintf(
-		"%s/flights?access_key=%s&limit=%d&offset=%d&arr_iata=%s",
-		a.URL,
-		a.AccessToken,
-		a.PageLimit,
-		offset,
-		arrivalPortCode)
+func (a *AviationStack) getPage(offset int, params map[string]string) AviationStackFlightsResponse {
+	url := fmt.Sprintf("%s/flights", a.URL)
 
 	req, _ := http.NewRequest("GET", url, nil)
+	queryParams := req.URL.Query()
+	queryParams.Add("access_key", a.AccessToken)
+	queryParams.Add("offset", strconv.Itoa(offset))
+	queryParams.Add("limit", strconv.Itoa(a.PageLimit))
+	for key, value := range params {
+		queryParams.Add(key, value)
+	}
+	req.URL.RawQuery = queryParams.Encode()
+
 	res, _ := http.DefaultClient.Do(req)
 
 	defer res.Body.Close()
@@ -57,21 +61,21 @@ func getMaxPages(limit int, total int) int {
 	}
 }
 
-func (a *AviationStack) getPageAndStreamRecords(offset int, arrivalPortCode string, channel chan <- Flight, wg *sync.WaitGroup) {
+func (a *AviationStack) getPageAndStreamRecords(offset int, params map[string]string, channel chan <- Flight, wg *sync.WaitGroup) {
 	defer wg.Done()
 	log.Println(fmt.Sprintf("at offset: %d", offset))
-	flights := a.getPage(offset, arrivalPortCode)
+	flights := a.getPage(offset, params)
 	for _, flight := range flights.Data {
 		channel <- flight
 	}
 }
 
 
-func (a *AviationStack) StreamFlights(channel chan <- Flight, arrivalPortCode string) {
+func (a *AviationStack) StreamFlights(channel chan <- Flight, params map[string]string) {
 	defer close(channel)
 	var wg sync.WaitGroup
 
-	flights := a.getPage(0, arrivalPortCode)
+	flights := a.getPage(0, params)
 	for _, flight := range flights.Data {
 		channel <- flight
 	}
@@ -80,7 +84,7 @@ func (a *AviationStack) StreamFlights(channel chan <- Flight, arrivalPortCode st
 	wg.Add(totalPages)
 
 	for i := 1; i <= totalPages; i++ {
-		go a.getPageAndStreamRecords(i * 100, arrivalPortCode, channel, &wg)
+		go a.getPageAndStreamRecords(i * 100, params, channel, &wg)
 	}
 
 	wg.Wait()
